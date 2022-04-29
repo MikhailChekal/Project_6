@@ -49,18 +49,21 @@ T parallel_accumulate(Iterator first, Iterator last, T init, unsigned num_worker
 }
 
 int main() {
-    std::vector<int> test_sequence(500u);
+    std::vector<int> test_sequence(50000000u);
     std::vector<int> times;
     std::iota(test_sequence.begin(), test_sequence.end(), 0);
 
     {
         Timer<std::chrono::microseconds> t;
         // timer start
+        int a[10];
         for(auto i=1; i<9; i++) {
             auto result =
                     parallel_accumulate(std::begin(test_sequence),
                                         std::end(test_sequence), 0, i);
-            std::cout << "Thread count: " << i << std::endl;
+            a[i] = result;
+
+            //std::cout << "Thread count: " << i << std::endl;
             times.push_back(t.silent_prt());
 
             // timer finish
@@ -68,6 +71,6 @@ int main() {
         }
     }
     for (int time : times) {
-        std::cout << time << " ";
+        std::cout << time << "\n";
     }
 }
